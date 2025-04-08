@@ -2,4 +2,6 @@
 /data
 /SVHN
 /__pycache__
-/niid_bench
+/niid_bench/data
+/niid_bench/outputs
+/niid_bench/__pycache__
