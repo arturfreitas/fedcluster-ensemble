@@ -19,6 +19,7 @@ from collections import Counter
 import re
 import pandas as pd
 import ast
+from sklearn.linear_model import LinearRegression
 
 
 def save_parameters(parameters, filepath):
@@ -191,6 +192,40 @@ def calculate_similarity(global_model_layer, client_model_layer) -> float:
         similarity = dot_product / (norm_global * norm_client)
         
         return similarity
+
+def calculate_trend(performance_dict: dict, metric: str = "centralized_accuracy", window: int = 5) -> float:
+    """
+    Calculate the trend (slope) of a specified metric over the last `window` rounds
+    using linear regression. Assumes input is a dictionary with performance history.
+
+    Parameters:
+    - performance_dict (dict): Dictionary with structure like self.performancedataset
+    - metric (str): The metric key to compute the trend on (e.g., 'centralized_accuracy')
+    - window (int): The number of past rounds to consider for trend computation
+
+    Returns:
+    - float: Slope of the trend (positive for increasing trend, negative for decreasing)
+    """
+    # Convert dictionary to sorted DataFrame
+    df = pd.DataFrame.from_dict(performance_dict, orient="index").sort_values("round")
+
+    # Check if there are enough rounds
+    if len(df) < window:
+        return None  # Not enough data
+
+    # Select the last `window` rows
+    df_window = df.tail(window)
+
+    # Extract X (rounds) and y (target metric)
+    X = df_window["round"].values.reshape(-1, 1)
+    y = df_window[metric].values
+
+    # Fit linear regression to get the slope (trend)
+    model = LinearRegression()
+    model.fit(X, y)
+    trend = model.coef_[0]
+
+    return trend
     
     
 def find_clusters(last_layers_with_cid: List[Tuple[str, np.ndarray]], eps=0.5, min_samples=2) -> Tuple[Dict[str, int], float]:

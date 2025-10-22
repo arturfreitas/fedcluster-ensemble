@@ -22,13 +22,25 @@ class ExperimentResult:
 
 
 def load_experiments_from_csv(csv_file_path):
-    """Load experiments from a CSV file and return a list of ExperimentResult objects."""
+    """
+    Load experiments from a CSV file and return a list of ExperimentResult objects.
+
+    ⚠️ On macOS and Unix systems, file paths should use '/' instead of '\\'. This function normalizes paths automatically.
+    """
     experiments = []
     df = pd.read_csv(csv_file_path)
+
     for _, row in df.iterrows():
         if row.get('valid', 'No') == 'Yes':  # Only include experiments marked as 'Yes' in the 'valid' column
-            exp = ExperimentResult(**row.to_dict())
+            row_dict = row.to_dict()
+
+            # Normalize Windows-style paths to Unix-style (for macOS compatibility)
+            if 'output_folder' in row_dict and isinstance(row_dict['output_folder'], str):
+                row_dict['output_folder'] = row_dict['output_folder'].replace("\\", "/")
+
+            exp = ExperimentResult(**row_dict)
             experiments.append(exp)
+
     return experiments
 
 if __name__ == "__main__":

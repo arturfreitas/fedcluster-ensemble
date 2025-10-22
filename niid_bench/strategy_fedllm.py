@@ -1,5 +1,6 @@
-"""Fed Cosine"""
+"""Fed LLM"""
 
+# python -m niid_bench.main --config-name fedllm_base 
 from functools import reduce
 from logging import WARNING
 
@@ -63,73 +64,25 @@ from collections import defaultdict
 import random
 import requests
 
-API_KEY = '13qd759fs4'
+
+from niid_bench.fedllm_utils import initial_message, invoke_llm, output_format_instructions
+
+# from langchain_ollama import ChatOllama
+# from langchain.schema import SystemMessage, HumanMessage, AIMessage
+
 
 from niid_bench.utils import calculate_similarity,find_clusters, experiment_with_dbscan_and_print
 
 
-initial_message = [
-    {
-        "role": "system",
-        "content": (
-            "You are an expert federated learning assistant. Consider all the knowledge about client selection for federated learning existent on the scientific literature"
-            "Your task is to help with client selection at each training round. "
-            "At each round, you will receive performance data from all clients. "
-            "Your goal is to minimize the number of updates (client participation) "
-            "while improving the global model’s centralized accuracy. "
-            "Based on the data, return the number of clients to select, and the client IDs of selected clients."
-            
-        )
-    },
-    
-]
+API_KEY = '13qd759fs4'
 
-output_format_instructions = (
-    "Select the appropriate number of clients to participate in the next round. "
-    "Return only a valid JSON object in the following format containing the number of clients selected, the client ids of the selected clients, "
-    "and a brief explanation of why those clients were selected:\n"
-    "{\n"
-    "  \"num_clients\": X,\n"
-    "  \"selected_clients\": [\"id\", \"id2\"],\n"
-    "  \"explanation\": \"Your explanation here.\"\n"
-    "}\n"
-    "You are free to select any clients in any round, regardless of their participation history. "
-    "Avoid selecting the same clients every round unless strictly necessary. Consider exploring other clients when possible to help improve the global model more efficiently over time. "
-    "Only output the JSON object in this exact format, and do not include any extra text outside the JSON."
-)
+
 
 def set_parameters(self, parameters):
     """Set the local model parameters using given ones."""
     params_dict = zip(self.state_dict().keys(), parameters)
     state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
     self.load_state_dict(state_dict, strict=True)
-    
-def invoke_jamba(messages, api_key):
-    url = "https://tfrq6se0fg.execute-api.us-east-1.amazonaws.com/invoke_model"
-
-    headers = {
-        "Content-Type": "application/json",
-        "api-key": api_key
-    }
-
-    payload = {
-        "messages": messages,
-        "max_tokens": 200,
-        "temperature": 0.7,
-        "top_p": 0.8
-    }
-
-    response = requests.post(url, headers=headers, data=json.dumps(payload))
-    print(response.json())
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return {
-            "error": "Request failed",
-            "status_code": response.status_code,
-            "response": response.text
-        }
-    
     
 class FedLLM(FedAvg):
     def __init__(self, fraction_fit: float = 1.0, *args, **kwargs):
@@ -178,18 +131,19 @@ class FedLLM(FedAvg):
         # Get all clients
         clients = list(client_manager.all().values())
         num_clients = len(clients)
+        
         # Calculate the number of clients for the current round
-       
         logging.info(f'Number of clients for round {server_round} is {num_clients}')
 
         # Prepare the fit instructions for the selected clients
         
         if server_round == 1:
+            # all clients participate on the first round
         
             fit_ins = FitIns(parameters, config)
             client_instructions = [(client, fit_ins) for client in clients]
         else:
-            # sample clients from each cluster as per fraction fit
+            # sample clients using llm
             sampled_clients = self.sample_clients_via_llm(server_round,clients)
             
             client_instructions = [] 
@@ -214,26 +168,27 @@ class FedLLM(FedAvg):
 
         try:
             # Call LLM with conversation history
-            response = invoke_jamba(self.conversation_messages, API_KEY)
-
-            if "reply" not in response:
-                raise ValueError("LLM response missing 'reply' field")
+            model_name = "llama3.2:3b"
+            response = invoke_llm(self.conversation_messages, model_name)
+            response_json = json.loads(response)
+            
+            logging.info(f"LLM response is{response}")
+            
 
             # Parse JSON string returned by LLM
-            llm_reply = json.loads(response["reply"])
-            selected_ids = [str(int(cid.replace("client_", ""))) for cid in llm_reply.get("selected_clients", [])]
-            num_selected = llm_reply.get("num_clients", len(selected_ids))
+
+            selected_ids = [str(int(cid.replace("client_", ""))) for cid in response_json.get("selected_clients", [])]
+            num_selected = response_json.get("num_clients", len(selected_ids))
 
             # Log response
-            explanation = llm_reply.get("explanation", "No explanation provided.")
+            explanation = response_json.get("explanation", "No explanation provided.")
             logging.info(f"[LLM] Selected {num_selected} clients: {selected_ids} in Round {server_round}, explanation is:\n {explanation}")
-            
             
 
             # Add assistant response to conversation
             self.conversation_messages.append({
                 "role": "assistant",
-                "content": json.dumps(llm_reply)
+                "content": json.dumps(response)
             })
 
             # Filter the clients by ID

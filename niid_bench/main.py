@@ -172,7 +172,7 @@ def main(cfg: DictConfig) -> None:
     # ]
     
     for metric, round_value_tuple_list in history.metrics_centralized.items():  # type: ignore
-        centralized_history_dict["centralized_" + metric] = [
+        centralized_history_dict[metric] = [
             val for _, val in round_value_tuple_list
         ]
     

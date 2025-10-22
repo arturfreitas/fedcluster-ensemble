@@ -41,12 +41,11 @@ model:
   input_dim: 400
   hidden_dims: [120, 84]
   num_classes: 10
-  dropout: False
 
 strategy:
   _target_: niid_bench.strategy_fedllm.FedLLM # points to your strategy (either custom or exiting in Flower)
   # rest of strategy config
-  fraction_fit: cyclic # fraction fit to be used for sampling clusters
+  fraction_fit: 0.5 # fraction fit to be used for sampling clusters
   fraction_evaluate: 0
   min_fit_clients: ${num_clients}
   min_available_clients: ${num_clients}

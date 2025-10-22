@@ -141,8 +141,7 @@ problem with wrong call to aggegrate fit was detected",No
 135,10,0.5,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-10-30\\16-13-54,0.01,FALSE,,Yes
 136,20,0.5,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-10-30\\16-14-08,0.01,FALSE,,Yes
 137,30,0.5,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-10-30\\16-14-40,0.01,FALSE,,Yes
-138,30,0.7,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-11-24\\23-03-39,0.01,FALSE,,Yes
-139,30,0.7,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,,0.01,FALSE,,Yes
+138,30,0.7,FedAvg,svhn,2,60,Non-IID,iid,NA,NA,64,outputs\\2024-11-24\\23-03-39,0.01,FALSE,,Yes
 140,20,0.7,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-12-07\\23-09-52,0.01,FALSE,,Yes
 141,30,cyclic,FedClusterEnsemble,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-12-08\\03-34-47,0.01,FALSE,,Yes
 142,20,cyclic,FedClusterEnsemble,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-12-08\\03-43-05,0.01,FALSE,,Yes
@@ -152,3 +151,28 @@ problem with wrong call to aggegrate fit was detected",No
 146,30,0.7,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-12-12\\01-21-32,0.01,FALSE,,Yes
 147,20,0.7,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-12-12\\01-22-07,0.01,FALSE,,Yes
 148,10,0.7,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2024-12-12\\01-24-00,0.01,FALSE,,Yes
+149,30,cyclic,FedClusterEnsemble,,,,,,,,,,,FALSE,,Yes
+150,20,dynamic,FedMPC,cifar10,2,20,iid,iid,NA,NA,64,outputs\\2025-07-18\\13-58-44,0.01,FALSE,,Yes
+151,20,0.5,FedAvg,cifar10,2,20,iid,iid,NA,NA,64,outputs\\2025-07-18\\14-52-23,0.01,FALSE,,
+152,20,dynamic,FedMPC,cifar10,2,60,iid,iid,NA,NA,64,outputs\\2025-07-18\\15-17-23,0.01,FALSE,,Yes
+153,20,0.5,FedAvg,cifar10,2,60,iid,iid,NA,NA,64,outputs\\2025-07-18\\15-26-06,0.01,FALSE,,Yes
+154,20,0.5,FedAvgExp,cifar10,2,60,iid,iid,NA,NA,64,outputs\\2025-07-18\\23-10-11,0.01,FALSE,fixed fraction fit,Yes
+155,20,0.7,FedAvgExp,cifar10,2,60,iid,iid,NA,NA,64,outputs\\2025-07-18\\23-26-23,0.01,FALSE,fixed fraction fit,Yes
+156,20,dynamic,FedAvgExp,cifar10,2,60,iid,iid,NA,NA,64,outputs\\2025-07-18\\23-58-42,0.01,FALSE,"step function, 0.01 on the initial 10 rounds and 1 onwards",Yes
+157,20,dynamic,FedAvgExp,cifar10,2,60,iid,iid,NA,NA,64,outputs\\2025-07-19\\00-49-08,0.01,FALSE,"        min_fraction = 0.05
+        max_fraction = 1.0
+
+        # Linearly decrease fraction_fit from max_fraction to min_fraction",Yes
+158,20,dynamic,FedMPC,cifar10,2,60,iid,iid,NA,NA,64,outputs\\2025-07-19\\01-40-55,0.01,FALSE,"alpha=0.80, beta = 0.20, inicial = 0.5",Yes
+159,20,dynamic,FedMPC,cifar10,2,60,iid,iid,NA,NA,64,outputs\\2025-07-19\\01-50-02,0.01,FALSE,"alpha=0.90, beta = 0.10, inicial = 0.9",Yes
+160,20,dynamic,FedMPC,cifar10,2,60,iid,iid,NA,NA,64,outputs\\2025-07-19\\02-12-07,0.01,FALSE,"alpha=0.90, beta = 0.10, inicial = 0.9",Yes
+161,10,cyclic,FedClusterEnsemble,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-11\\18-14-15,0.01,FALSE,"alpha=0.5, beta = 0.5, inicial = 0.9, trials= 200",Yes
+162,10,cyclic,FedClusterEnsemble,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-11\\17-40-35,0.01,FALSE,,Yes
+163,30,cyclic,FedClusterEnsemble,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-11\\19-09-06,0.01,FALSE,,Yes
+164,30,cyclic,FedClusterEnsemble,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-11\\19-14-03,0.01,FALSE,,Yes
+165,30,cyclic,FedClusterEnsemble,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-11\\19-14-46,0.01,FALSE,,Yes
+166,30,cyclic,FedClusterEnsemble,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-11\\21-08-32,0.01,FALSE,,Yes
+167,20,cyclic,FedClusterEnsemble,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-11\\18-14-15,0.01,FALSE,,Yes
+168,30,cyclic,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-12\\01-30-31,0.01,FALSE,,Yes
+169,30,cyclic,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-12\\01-30-36,0.01,FALSE,,Yes
+170,30,cyclic,FedAvg,svhn,2,60,Non-IID,label_groups,NA,NA,64,outputs\\2025-09-11\\19-14-46,0.01,FALSE,,Yes
