@@ -1,0 +1,42 @@
+[
+        {
+          "ID": 1,
+          "total_clients": 20,
+          "fraction_fit": 0.7,
+          "strategy": "FedAvg",
+          "dataset": "mnist",
+          "local_epochs": 1,
+          "num_rounds": 50,
+          "setting": "Non-IID",
+          "partitioning_type": "label_quantity",
+          "labels_per_client": 3,
+          "alpha": "NA",
+          "batch_size": 64,
+          "output_folder": "outputs\\\\2024-08-13\\\\00-09-03",
+          "learning_rate": 0.01,
+          "dropout": false,
+          "Comments": "Yes",
+          "valid": "Yes"
+        },
+        {
+          "ID": 2,
+          "total_clients": 20,
+          "fraction_fit": 0.7,
+          "strategy": "FedCosine",
+          "dataset": "mnist",
+          "local_epochs": 1,
+          "num_rounds": 50,
+          "setting": "Non-IID",
+          "partitioning_type": "label_quantity",
+          "labels_per_client": 3,
+          "alpha": "NA",
+          "batch_size": 64,
+          "output_folder": "outputs\\\\2024-08-13\\\\10-10-39",
+          "learning_rate": 0.01,
+          "dropout": false,
+          "Comments": "Yes",
+          "valid": "Yes"
+        },
+
+      ]
+      
